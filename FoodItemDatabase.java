@@ -1,5 +1,3 @@
-package edu.ucalgary.ensf409;
-
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -16,7 +14,7 @@ public class FoodItemDatabase {
         try {
             dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "user1", "ensf");
             Statement myStatement = dbConnect.createStatement();
-            results = myStatement.executeQuery("SELECT * FROM AVILABLE_FOOD");
+            results = myStatement.executeQuery("SELECT * FROM AVAILABLE_FOOD");
             while (results.next()){
                 FoodItem currFood = new FoodItem(results.getInt("ItemID"), results.getString("Name"), results.getInt("GrainContent"), results.getInt("FVContent"), results.getInt("ProContent"), results.getInt("Other"), results.getInt("Calories"));
                 foodItemArray.add(currFood);
@@ -27,9 +25,9 @@ public class FoodItemDatabase {
         }
     }
 
-    public void deleteItem(FoodItem food){
+    public void deleteItem(String foodName){
         for (int i = 0; i < foodItemArray.size(); i++){
-            if (foodItemArray.get(i).getItemName() == food.getItemName()){
+            if (foodItemArray.get(i).getItemName().equals(foodName)){
                 foodItemArray.remove(i);
             }
         }
@@ -40,10 +38,13 @@ public class FoodItemDatabase {
     }
 
     public void updateDatabase(){
-        Statement clearDatabaseStatement = dbConnect.createStatement();
-        int executeClearDatabaseStatus = clearDatabaseStatement.executeUpdate("truncate AVAILABLE_FOOD");
-        if (executeClearDatabaseStatus != 1){
-            throw new Exception("Unable to clear database");
+        Statement clearDatabaseStatement;
+        try {
+            clearDatabaseStatement = dbConnect.createStatement();
+            int executeClearDatabaseStatus = clearDatabaseStatement.executeUpdate("truncate AVAILABLE_FOOD");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         for (FoodItem currFoodItem : foodItemArray){
@@ -54,11 +55,19 @@ public class FoodItemDatabase {
             int otherNutrition = currFoodItem.getOtherNutrition();
             int calories = currFoodItem.getCalories();
 
-            Statement updateDatabaseStatement = dbConnect.createStatement();
-            int executeUpdateDatabaseStatus = updateDatabaseStatement.executeUpdate("INSERT INTO AVAILABLE_FOOD(Name, GrainContent, FVContent, ProContent, Other, Calories)VALUES('"+ itemName + "', " + grainContent +", " + fruitVeggiesContent +", " + proteinContent + ", " + otherNutrition + ", " + calories + ")");
-            if (executeUpdateDatabaseStatus != 1){
-                throw new Exception("Unable to add " + itemName + "into the database");
+            try{
+                Statement updateDatabaseStatement = dbConnect.createStatement();
+                int executeUpdateDatabaseStatus = updateDatabaseStatement.executeUpdate("INSERT INTO AVAILABLE_FOOD(Name, GrainContent, FVContent, ProContent, Other, Calories)VALUES('"+ itemName + "', " + grainContent +", " + fruitVeggiesContent +", " + proteinContent + ", " + otherNutrition + ", " + calories + ")");
             }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void printDatabase(){
+        for (FoodItem currFoodItem : foodItemArray){
+            System.out.println(currFoodItem.getItemName());
         }
     }
 }
