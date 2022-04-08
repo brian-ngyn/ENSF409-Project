@@ -24,14 +24,15 @@ class GUI{
         scrPane.setPreferredSize(new Dimension(500,500));
         mainFrame.getContentPane().add(scrPane);
 
-        // Beginning of code for the Hamper Panel
+        // New hamper button and label
         JPanel hamperCountPanel = new JPanel();
         JButton hamperButton = new JButton("New Hamper");
         JLabel hamperLabel = new JLabel("Number of Hampers: " + hamperCount);
         hamperCountPanel.add(hamperButton);
         hamperCountPanel.add(hamperLabel);
         mainFrame.add(hamperCountPanel);
-        /* mainFrame.getContentPane().add(mainPanel); */
+
+        // TODO: Add text area displaying message. will display at least either "Success" or "Error" after pressing submit
 
         // Listener event for Button press, create a new hamper panel
         // Within the hamper panel, add sub-panels for each client type.
@@ -43,15 +44,13 @@ class GUI{
             hampers.add(newHamper);
         });
 
-        // Submit order button -> iterate through gui hampers, create Hamper for each gui hamper and add to arraylist of actual hampers
+        // TODO: Submit order button -> iterate through gui hampers,
+        // create Hamper for each gui hamper and add to arraylist of actual hampers
         // then create Order and pass in arraylist. Then call call validateOrder on new Order object
-
-            
+     
         mainFrame.setLayout(new FlowLayout(FlowLayout.LEFT));
         mainFrame.setSize(500,750);
         mainFrame.setVisible(true);
-
-
     }
 }
 
