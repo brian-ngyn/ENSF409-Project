@@ -39,7 +39,7 @@ public class Order implements PrintOutput{
     public void validateOrder(){
         boolean valid = true;
         for (Hamper hamper: hampers){
-            if (!hamper.validateOrder()){
+            if (!hamper.validateHamper()){
                 valid = false;
                 break;
             }
@@ -65,27 +65,27 @@ public class Order implements PrintOutput{
             // Write hamper summary to file
             for (int i = 0; i < hampers.size(); i++){
                 writer.write("Hamper " + i + "\n");
-                writer.write("--------------------\n")
-                if (hampers[i].getNumAdultsM() > 0){
-                    writer.write(hampers[i].getNumAdultsM() + " Adult Males\n");
+                writer.write("--------------------\n");
+                if (hampers.get(i).getNumAdultsM() > 0){
+                    writer.write(hampers.get(i).getNumAdultsM() + " Adult Males\n");
                 }
-                if (hampers[i].g2etNumAdultsF() > 0){
-                    writer.write(hampers[i].getNumAdultsF() + " Adult Females\n");
+                if (hampers.get(i).getNumAdultsF() > 0){
+                    writer.write(hampers.get(i).getNumAdultsF() + " Adult Females\n");
                 }
-                if (hampers[i].getNumChildUnder8() > 0){
-                    writer.write(hampers[i].getNumChildUnder8() + " Children Under 8\n");
+                if (hampers.get(i).getNumChildUnder8() > 0){
+                    writer.write(hampers.get(i).getNumChildUnder8() + " Children Under 8\n");
                 }
-                if (hampers[i].getNumChildOver8() > 0){
-                    writer.write(hampers[i].getNumChildOver8() + " Children Over 8\n");
+                if (hampers.get(i).getNumChildOver8() > 0){
+                    writer.write(hampers.get(i).getNumChildOver8() + " Children Over 8\n");
                 }
                 writer.write("\n");
             }
             // Write hamper details to file
             for (int i = 0; i < hampers.size(); i++){
                 writer.write("Hamper " + i + " items:\n");
-                FoodItem[] foodItems = hampers[i].getFoodItems();
+                FoodItem[] foodItems = hampers.get(i).getFoodItems();
                 for (FoodItem foodItem : foodItems){
-                    writer.write(String.format("%-15f %s\n", foodItem.getItemId(), foodItem.getItemName()));
+                    writer.write(String.format("%-15f %s\n", foodItem.getItemID(), foodItem.getItemName()));
                 }
                 writer.write("\n");
             }
