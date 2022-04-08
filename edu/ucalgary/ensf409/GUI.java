@@ -13,23 +13,33 @@ class GUI{
         // Beginning of code for mainFrame
         JFrame mainFrame = new JFrame("Testing");
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.getContentPane().setLayout(new FlowLayout());
         
+        // Panel containing everything
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(0,1));
+        JScrollPane scrPane = new JScrollPane(mainPanel);
+        scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
+        scrPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);  
+        scrPane.setPreferredSize(new Dimension(500,500));
+        mainFrame.getContentPane().add(scrPane);
+
         // Beginning of code for the Hamper Panel
-        JPanel hamperCountPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel hamperCountPanel = new JPanel();
         JButton hamperButton = new JButton("New Hamper");
         JLabel hamperLabel = new JLabel("Number of Hampers: " + hamperCount);
         hamperCountPanel.add(hamperButton);
         hamperCountPanel.add(hamperLabel);
-        mainFrame.getContentPane().add(hamperCountPanel);
+        mainFrame.add(hamperCountPanel);
+        /* mainFrame.getContentPane().add(mainPanel); */
 
         // Listener event for Button press, create a new hamper panel
         // Within the hamper panel, add sub-panels for each client type.
-        
         hamperButton.addActionListener(hamperActionEvent -> {
             hamperCount++;
             hamperLabel.setText("Number of Hampers: " + hamperCount);
             HamperGUI newHamper = new HamperGUI();
-            mainFrame.getContentPane().add(newHamper.getPanel());
+            mainPanel.add(newHamper.getPanel());
             hampers.add(newHamper);
         });
 
@@ -38,7 +48,7 @@ class GUI{
 
             
         mainFrame.setLayout(new FlowLayout(FlowLayout.LEFT));
-        mainFrame.setSize(500,500);
+        mainFrame.setSize(500,750);
         mainFrame.setVisible(true);
 
 
