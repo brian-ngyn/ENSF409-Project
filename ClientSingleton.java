@@ -27,7 +27,12 @@ public class ClientSingleton {
     }
 
     public Client getClient(String clientType) {
-        return clients.get(clientType);
+        Client tempClient = clients.get(clientType);
+        if (tempClient == null) {
+            throw new IllegalArgumentException("Client not found");
+        } else {
+            return tempClient;
+        }
     }
 
 
