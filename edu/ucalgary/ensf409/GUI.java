@@ -1,7 +1,9 @@
+package edu.ucalgary.ensf409;
+
 import javax.swing.*;
 import java.awt.*;
 
-class abc{
+class GUI{
     private static int hamperCount;
     private static int maleAdultsCount;
     private static int femaleAdultsCount;

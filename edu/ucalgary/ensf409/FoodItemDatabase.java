@@ -1,3 +1,5 @@
+package edu.ucalgary.ensf409;
+
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -69,5 +71,14 @@ public class FoodItemDatabase {
         for (FoodItem currFoodItem : foodItemArray){
             System.out.println(currFoodItem.getItemName());
         }
+    }
+
+    public FoodItem getFoodItem(String foodItem){
+        for (FoodItem currFood : foodItemArray){
+            if (currFood.getItemName().equals(foodItem)){
+                return currFood;
+            }
+        }
+        return null;
     }
 }

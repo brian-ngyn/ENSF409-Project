@@ -1,3 +1,5 @@
+package edu.ucalgary.ensf409;
+
 public class Client {
     private final int CLIENTID;
     private final String CLIENTTYPE;
