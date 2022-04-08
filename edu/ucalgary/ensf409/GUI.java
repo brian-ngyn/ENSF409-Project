@@ -2,13 +2,12 @@ package edu.ucalgary.ensf409;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 class GUI{
     private static int hamperCount;
-    private static int maleAdultsCount;
-    private static int femaleAdultsCount;
-    private static int childUnder8Count;
-    private static int childOver8Count;
+    private static ArrayList<HamperGUI> hampers = new ArrayList<>();
+    
     public static void main(String[] args) {
 
         // Beginning of code for mainFrame
@@ -29,53 +28,13 @@ class GUI{
         hamperButton.addActionListener(hamperActionEvent -> {
             hamperCount++;
             hamperLabel.setText("Number of Hampers: " + hamperCount);
-            // New Hamper Panel 
-            JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            newHamperPanel.setLayout(new GridLayout(4,1));
-
-            // Male adults sub-panel
-            JPanel maleAdultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            JLabel maleAdultsLabel = new JLabel("Number of Male Adults: ");
-            JLabel maleAdultsCountLabel = new JLabel("" + maleAdultsCount);
-            JButton maleAdultsDecrement = new JButton("-");
-            JButton maleAdultsIncrement = new JButton("+");
-            maleAdultsPanel.add(maleAdultsLabel);
-            maleAdultsPanel.add(maleAdultsDecrement);
-            maleAdultsPanel.add(maleAdultsCountLabel);
-            maleAdultsPanel.add(maleAdultsIncrement);
-
-            maleAdultsIncrement.addActionListener(maleAdultsActionEvent -> {
-                maleAdultsCount++;
-                maleAdultsCountLabel.setText("" + maleAdultsCount);
-            });
-
-            maleAdultsDecrement.addActionListener(maleAdultsActionEvent -> {
-                maleAdultsCount--;
-                maleAdultsCountLabel.setText("" + maleAdultsCount);
-            });
-
-            // Female adults sub-panel
-            JPanel femaleAdultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            JLabel femaleAdultsLabel = new JLabel("Number of Female Adults: " + femaleAdultsCount);
-            femaleAdultsPanel.add(femaleAdultsLabel);
-
-            // Child under 8 sub-panel
-            JPanel childUnder8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            JLabel childUnder8Label = new JLabel("Number of Childen under 8: " + childUnder8Count);
-            childUnder8Panel.add(childUnder8Label);
-
-            // Child over 8 sub-panel
-            JPanel childOver8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            JLabel childOver8Label = new JLabel("Number of Children over 8:" + childOver8Count);
-            childOver8Panel.add(childOver8Label);
-
-            newHamperPanel.add(maleAdultsPanel);
-            newHamperPanel.add(femaleAdultsPanel);
-            newHamperPanel.add(childUnder8Panel);
-            newHamperPanel.add(childOver8Panel);
-            newHamperPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-            mainFrame.getContentPane().add(newHamperPanel);
+            HamperGUI newHamper = new HamperGUI();
+            mainFrame.getContentPane().add(newHamper.getPanel());
+            hampers.add(newHamper);
         });
+
+        // Submit order button -> iterate through gui hampers, create Hamper for each gui hamper and add to arraylist of actual hampers
+        // then create Order and pass in arraylist. Then call call validateOrder on new Order object
 
             
         mainFrame.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -83,5 +42,64 @@ class GUI{
         mainFrame.setVisible(true);
 
 
+    }
+}
+
+class HamperGUI extends Frame{
+    private int maleAdultsCount;
+    private int femaleAdultsCount;
+    private int childUnder8Count;
+    private int childOver8Count;
+    private JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+    public HamperGUI () {
+        // New Hamper Panel 
+        newHamperPanel.setLayout(new GridLayout(4,1));
+
+        // Male adults sub-panel
+        JPanel maleAdultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel maleAdultsLabel = new JLabel("Number of Male Adults: ");
+        JLabel maleAdultsCountLabel = new JLabel("" + maleAdultsCount);
+        JButton maleAdultsDecrement = new JButton("-");
+        JButton maleAdultsIncrement = new JButton("+");
+        maleAdultsPanel.add(maleAdultsLabel);
+        maleAdultsPanel.add(maleAdultsDecrement);
+        maleAdultsPanel.add(maleAdultsCountLabel);
+        maleAdultsPanel.add(maleAdultsIncrement);
+
+        maleAdultsIncrement.addActionListener(maleAdultsActionEvent -> {
+            maleAdultsCount++;
+            maleAdultsCountLabel.setText("" + maleAdultsCount);
+        });
+
+        maleAdultsDecrement.addActionListener(maleAdultsActionEvent -> {
+            maleAdultsCount--;
+            maleAdultsCountLabel.setText("" + maleAdultsCount);
+        });
+
+        // Female adults sub-panel
+        JPanel femaleAdultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel femaleAdultsLabel = new JLabel("Number of Female Adults: " + femaleAdultsCount);
+        femaleAdultsPanel.add(femaleAdultsLabel);
+
+        // Child under 8 sub-panel
+        JPanel childUnder8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel childUnder8Label = new JLabel("Number of Childen under 8: " + childUnder8Count);
+        childUnder8Panel.add(childUnder8Label);
+
+        // Child over 8 sub-panel
+        JPanel childOver8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel childOver8Label = new JLabel("Number of Children over 8:" + childOver8Count);
+        childOver8Panel.add(childOver8Label);
+
+        newHamperPanel.add(maleAdultsPanel);
+        newHamperPanel.add(femaleAdultsPanel);
+        newHamperPanel.add(childUnder8Panel);
+        newHamperPanel.add(childOver8Panel);
+        newHamperPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+    }
+
+    public JPanel getPanel(){
+        return this.newHamperPanel;
     }
 }
