@@ -35,8 +35,6 @@ class GUI{
         scrPane.setPreferredSize(new Dimension(450,600));
         mainFrame.getContentPane().add(scrPane);
 
-        // TODO: Add text area displaying message. will display at least either "Success" or "Error" after pressing submit
-
         // Listener event for Button press, create a new hamper panel
         // Within the hamper panel, add sub-panels for each client type.
         hamperButton.addActionListener(hamperActionEvent -> {
@@ -49,33 +47,27 @@ class GUI{
 
         JPanel submitOrderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton submitOrderButton = new JButton("Submit Order");
-        
+        submitOrderPanel.add(submitOrderButton);
 
         submitOrderButton.addActionListener(submitOrderActionEvent -> {
-            ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
-            for (HamperGUI currHamper : hampersGUIArray){
-                tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildUnder8Count(), currHamper.getChildOver8Count(), 1));
+            // ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
+            // for (HamperGUI currHamper : hampersGUIArray){
+            //     tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildUnder8Count(), currHamper.getChildOver8Count(), 1));
+            // }
+            // order = new Order(tempHamperArray);
+            // validOrder = order.validateOrder();
+
+            JLabel successLabel = new JLabel();
+            submitOrderPanel.add(successLabel);
+            if (validOrder){
+                successLabel.setText("Success! Order is valid");
             }
-            order = new Order(tempHamperArray);
-            validOrder = order.validateOrder();
+            else {
+                successLabel.setText("Error! Order is invalid");
+            }
         });
 
-        JLabel successLabel = new JLabel();
-        if (validOrder){
-            successLabel = new JLabel("Success! Order is valid");
-        }
-        else {
-            successLabel = new JLabel("Error. Order is invalid");
-        }
-
-        submitOrderPanel.add(submitOrderButton);
-        submitOrderPanel.add(successLabel);
         mainFrame.add(submitOrderPanel);
-        
-
-        // TODO: Submit order button -> iterate through gui hampers,
-        // create Hamper for each gui hamper and add to arraylist of actual hampers
-        // then create Order and pass in arraylist. Then call call validateOrder on new Order object
      
         mainFrame.setLayout(new FlowLayout(FlowLayout.LEFT));
         mainFrame.setSize(500,750);
