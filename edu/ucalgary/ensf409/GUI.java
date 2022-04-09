@@ -48,17 +48,23 @@ class GUI{
         JPanel submitOrderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton submitOrderButton = new JButton("Submit Order");
         submitOrderPanel.add(submitOrderButton);
+        JLabel successLabel = new JLabel();
+        submitOrderPanel.add(successLabel);
 
         submitOrderButton.addActionListener(submitOrderActionEvent -> {
+            if (validOrder){
+                validOrder = false;
+            }
+            else {
+                validOrder = true;
+            }
             // ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
             // for (HamperGUI currHamper : hampersGUIArray){
             //     tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildUnder8Count(), currHamper.getChildOver8Count(), 1));
             // }
             // order = new Order(tempHamperArray);
             // validOrder = order.validateOrder();
-
-            JLabel successLabel = new JLabel();
-            submitOrderPanel.add(successLabel);
+            
             if (validOrder){
                 successLabel.setText("Success! Order is valid");
             }
