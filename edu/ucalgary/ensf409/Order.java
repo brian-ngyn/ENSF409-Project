@@ -36,18 +36,20 @@ public class Order implements PrintOutput{
      * Verify that all hampers in order can be built. If a hamper cannot be built,
      * print out an error message, otherwise, output the order form 
      */
-    public void validateOrder(){
+    public boolean validateOrder(){
         boolean valid = true;
         for (Hamper hamper: hampers){
             if (!hamper.validateHamper()){
                 valid = false;
-                break;
+                return valid;
             }
         }
         if (valid){
             printOrderForm();
+            return valid;
         } else {
             System.out.println("Invalid hamper configuration. Please try again.");
+            return valid;
         }
     }
 

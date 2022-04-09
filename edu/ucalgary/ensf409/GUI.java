@@ -6,8 +6,10 @@ import java.util.ArrayList;
 
 class GUI{
     private static int hamperCount;
-    private static ArrayList<HamperGUI> hampers = new ArrayList<>();
-    
+    private static ArrayList<HamperGUI> hampersGUIArray = new ArrayList<>();
+    private static Order order;
+    static boolean validOrder = false;
+
     public static void main(String[] args) {
 
         // Beginning of code for mainFrame
@@ -18,11 +20,6 @@ class GUI{
         // Panel containing everything
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(0,1));
-        JScrollPane scrPane = new JScrollPane(mainPanel);
-        scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
-        scrPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);  
-        scrPane.setPreferredSize(new Dimension(500,500));
-        mainFrame.getContentPane().add(scrPane);
 
         // New hamper button and label
         JPanel hamperCountPanel = new JPanel();
@@ -32,6 +29,12 @@ class GUI{
         hamperCountPanel.add(hamperLabel);
         mainFrame.add(hamperCountPanel);
 
+        JScrollPane scrPane = new JScrollPane(mainPanel);
+        scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
+        scrPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);  
+        scrPane.setPreferredSize(new Dimension(450,600));
+        mainFrame.getContentPane().add(scrPane);
+
         // TODO: Add text area displaying message. will display at least either "Success" or "Error" after pressing submit
 
         // Listener event for Button press, create a new hamper panel
@@ -39,10 +42,36 @@ class GUI{
         hamperButton.addActionListener(hamperActionEvent -> {
             hamperCount++;
             hamperLabel.setText("Number of Hampers: " + hamperCount);
-            HamperGUI newHamper = new HamperGUI();
+            HamperGUI newHamper = new HamperGUI(hamperCount);
             mainPanel.add(newHamper.getPanel());
-            hampers.add(newHamper);
+            hampersGUIArray.add(newHamper);
         });
+
+        JPanel submitOrderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton submitOrderButton = new JButton("Submit Order");
+        
+
+        submitOrderButton.addActionListener(submitOrderActionEvent -> {
+            ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
+            for (HamperGUI currHamper : hampersGUIArray){
+                tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildUnder8Count(), currHamper.getChildOver8Count(), 1));
+            }
+            order = new Order(tempHamperArray);
+            validOrder = order.validateOrder();
+        });
+
+        JLabel successLabel = new JLabel();
+        if (validOrder){
+            successLabel = new JLabel("Success! Order is valid");
+        }
+        else {
+            successLabel = new JLabel("Error. Order is invalid");
+        }
+
+        submitOrderPanel.add(submitOrderButton);
+        submitOrderPanel.add(successLabel);
+        mainFrame.add(submitOrderPanel);
+        
 
         // TODO: Submit order button -> iterate through gui hampers,
         // create Hamper for each gui hamper and add to arraylist of actual hampers
@@ -61,9 +90,11 @@ class HamperGUI extends Frame{
     private int childOver8Count;
     private JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    public HamperGUI () {
+    public HamperGUI (int hamperCount) {
         // New Hamper Panel 
-        newHamperPanel.setLayout(new GridLayout(4,1));
+        newHamperPanel.setLayout(new GridLayout(5,1));
+        JLabel hamperNumber = new JLabel("Hamper #" + hamperCount);
+        newHamperPanel.add(hamperNumber);
 
         // Male adults sub-panel
         JPanel maleAdultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -166,5 +197,21 @@ class HamperGUI extends Frame{
 
     public JPanel getPanel(){
         return this.newHamperPanel;
+    }
+
+    public int getMaleAdultsCount(){
+        return this.maleAdultsCount;
+    }
+
+    public int getFemaleAdultsCount(){
+        return this.femaleAdultsCount;
+    }
+
+    public int getChildUnder8Count(){
+        return this.childUnder8Count;
+    }
+
+    public int getChildOver8Count(){
+        return this.childOver8Count;
     }
 }
