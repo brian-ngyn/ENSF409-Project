@@ -9,16 +9,17 @@ class GUI{
     private static ArrayList<HamperGUI> hampersGUIArray = new ArrayList<>();
     private static Order order;
     static boolean validOrder = false;
+    static JFrame mainFrame = new JFrame("Testing");
+    static JPanel mainPanel = new JPanel();
+
 
     public static void main(String[] args) {
 
         // Beginning of code for mainFrame
-        JFrame mainFrame = new JFrame("Testing");
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.getContentPane().setLayout(new FlowLayout());
         
         // Panel containing everything
-        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(0,1));
 
         // New hamper button and label
@@ -79,6 +80,22 @@ class GUI{
         mainFrame.setSize(500,750);
         mainFrame.setVisible(true);
     }
+
+    public static ArrayList<HamperGUI> getHamperGUI(){
+        return hampersGUIArray;
+    }
+
+    public static JPanel getMainPanel(){
+        return mainPanel;
+    }
+
+    public static void removeHamperGUI(HamperGUI hamper){
+        hampersGUIArray.remove(hamper);
+    }
+
+    public static void decrementCount(){
+        hamperCount--;
+    }
 }
 
 class HamperGUI extends Frame{
@@ -90,7 +107,7 @@ class HamperGUI extends Frame{
 
     public HamperGUI (int hamperCount) {
         // New Hamper Panel 
-        newHamperPanel.setLayout(new GridLayout(5,1));
+        newHamperPanel.setLayout(new GridLayout(6,1));
         JLabel hamperNumber = new JLabel("Hamper #" + hamperCount);
         newHamperPanel.add(hamperNumber);
 
@@ -186,10 +203,19 @@ class HamperGUI extends Frame{
             childOver8CountLabel.setText("" + childOver8Count);
         });
 
+        JButton deleteHamperButton = new JButton("Delete Hamper");
+        deleteHamperButton.addActionListener(deleteHamperActionEvent -> {
+            GUI.getMainPanel().remove(this.newHamperPanel);
+            GUI.decrementCount();
+            GUI.removeHamperGUI(this);
+            GUI.getMainPanel().revalidate();
+            GUI.getMainPanel().repaint();
+        });
         newHamperPanel.add(maleAdultsPanel);
         newHamperPanel.add(femaleAdultsPanel);
         newHamperPanel.add(childUnder8Panel);
         newHamperPanel.add(childOver8Panel);
+        newHamperPanel.add(deleteHamperButton);
         newHamperPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
