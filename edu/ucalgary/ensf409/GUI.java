@@ -32,7 +32,7 @@ class GUI{
         JScrollPane scrPane = new JScrollPane(mainPanel);
         scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
         scrPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);  
-        scrPane.setPreferredSize(new Dimension(450,600));
+        scrPane.setPreferredSize(new Dimension(500,600));
         mainFrame.getContentPane().add(scrPane);
 
         // Listener event for Button press, create a new hamper panel
@@ -86,11 +86,12 @@ class HamperGUI extends Frame{
     private int femaleAdultsCount;
     private int childUnder8Count;
     private int childOver8Count;
+    private int quantity = 1;
     private JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     public HamperGUI (int hamperCount) {
-        // New Hamper Panel 
-        newHamperPanel.setLayout(new GridLayout(5,1));
+        // New Hamper Panel
+        newHamperPanel.setLayout(new GridLayout(6,1));
         JLabel hamperNumber = new JLabel("Hamper #" + hamperCount);
         newHamperPanel.add(hamperNumber);
 
@@ -186,10 +187,34 @@ class HamperGUI extends Frame{
             childOver8CountLabel.setText("" + childOver8Count);
         });
 
+        //Quantity sub-panel
+        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel quantityLabel = new JLabel("Quantity: ");
+        JLabel quantityCountLabel = new JLabel("" + quantity);
+        JButton quantityDecrement = new JButton("-");
+        JButton quantityIncrement = new JButton("+");
+        quantityPanel.add(quantityLabel);
+        quantityPanel.add(quantityDecrement);
+        quantityPanel.add(quantityCountLabel);
+        quantityPanel.add(quantityIncrement);
+
+        quantityIncrement.addActionListener(quantityActionEvent -> {
+            quantity++;
+            quantityCountLabel.setText("" + quantity);
+        });
+
+        quantityDecrement.addActionListener(quantityActionEvent -> {
+            if (quantity > 1){  
+                quantity--;
+            }
+            quantityCountLabel.setText("" + quantity);
+        });
+
         newHamperPanel.add(maleAdultsPanel);
         newHamperPanel.add(femaleAdultsPanel);
         newHamperPanel.add(childUnder8Panel);
         newHamperPanel.add(childOver8Panel);
+        newHamperPanel.add(quantityPanel);
         newHamperPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 

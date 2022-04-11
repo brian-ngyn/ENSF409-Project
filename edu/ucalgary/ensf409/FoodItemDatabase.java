@@ -9,11 +9,12 @@ public class FoodItemDatabase {
     private ResultSet results;
 
     public FoodItemDatabase(){
-
+        fetchFromFoodDatabase();
     }
 
     public void fetchFromFoodDatabase(){
         try {
+            foodItemArray.clear();
             dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "user1", "ensf");
             Statement myStatement = dbConnect.createStatement();
             results = myStatement.executeQuery("SELECT * FROM AVAILABLE_FOOD");
@@ -31,8 +32,10 @@ public class FoodItemDatabase {
         for (int i = 0; i < foodItemArray.size(); i++){
             if (foodItemArray.get(i).getItemName().equals(foodName)){
                 foodItemArray.remove(i);
+                return;
             }
         }
+        throw new IllegalArgumentException("Food Item " + foodName + " was not found in database");
     }
 
     public ArrayList<FoodItem> getFoodItemArray(){
@@ -79,6 +82,6 @@ public class FoodItemDatabase {
                 return currFood;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Food item does not exist into the database");
     }
 }
