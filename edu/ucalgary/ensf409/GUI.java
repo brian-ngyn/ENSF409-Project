@@ -89,6 +89,9 @@ class GUI{
 
     public static void removeHamperGUI(HamperGUI hamper){
         hampersGUIArray.remove(hamper);
+        for (int i = 0; i < hampersGUIArray.size(); i++){
+            hampersGUIArray.get(i).getHamperNumber().setText("Hamper # " + (i + 1));
+        }
     }
 
     public static void decrementCount(){
@@ -107,11 +110,12 @@ class HamperGUI extends Frame{
     private int childOver8Count;
     private int quantity = 1;
     private JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    private JLabel hamperNumber;
 
     public HamperGUI (int hamperCount) {
         // New Hamper Panel
         newHamperPanel.setLayout(new GridLayout(7,1));
-        JLabel hamperNumber = new JLabel("Hamper #" + hamperCount);
+        hamperNumber = new JLabel("Hamper #" + hamperCount);
         newHamperPanel.add(hamperNumber);
 
         // Male adults sub-panel
@@ -266,5 +270,9 @@ class HamperGUI extends Frame{
 
     public int getChildOver8Count(){
         return this.childOver8Count;
+    }
+
+    public JLabel getHamperNumber(){
+        return this.hamperNumber;
     }
 }
