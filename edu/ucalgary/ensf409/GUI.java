@@ -11,7 +11,7 @@ class GUI{
     static boolean validOrder = false;
     static JFrame mainFrame = new JFrame("Testing");
     static JPanel mainPanel = new JPanel();
-
+    static JLabel hamperLabel = new JLabel("Number of Hampers: 0");
 
     public static void main(String[] args) {
 
@@ -25,7 +25,6 @@ class GUI{
         // New hamper button and label
         JPanel hamperCountPanel = new JPanel();
         JButton hamperButton = new JButton("New Hamper");
-        JLabel hamperLabel = new JLabel("Number of Hampers: " + hamperCount);
         hamperCountPanel.add(hamperButton);
         hamperCountPanel.add(hamperLabel);
         mainFrame.add(hamperCountPanel);
@@ -33,7 +32,7 @@ class GUI{
         JScrollPane scrPane = new JScrollPane(mainPanel);
         scrPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
         scrPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);  
-        scrPane.setPreferredSize(new Dimension(450,600));
+        scrPane.setPreferredSize(new Dimension(500,600));
         mainFrame.getContentPane().add(scrPane);
 
         // Listener event for Button press, create a new hamper panel
@@ -80,7 +79,6 @@ class GUI{
         mainFrame.setSize(500,750);
         mainFrame.setVisible(true);
     }
-
     public static ArrayList<HamperGUI> getHamperGUI(){
         return hampersGUIArray;
     }
@@ -96,6 +94,10 @@ class GUI{
     public static void decrementCount(){
         hamperCount--;
     }
+
+    public static void updateCountText(){
+        hamperLabel.setText("Number of hampers: " + hamperCount);
+    }
 }
 
 class HamperGUI extends Frame{
@@ -103,11 +105,12 @@ class HamperGUI extends Frame{
     private int femaleAdultsCount;
     private int childUnder8Count;
     private int childOver8Count;
+    private int quantity = 1;
     private JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     public HamperGUI (int hamperCount) {
-        // New Hamper Panel 
-        newHamperPanel.setLayout(new GridLayout(6,1));
+        // New Hamper Panel
+        newHamperPanel.setLayout(new GridLayout(7,1));
         JLabel hamperNumber = new JLabel("Hamper #" + hamperCount);
         newHamperPanel.add(hamperNumber);
 
@@ -203,18 +206,44 @@ class HamperGUI extends Frame{
             childOver8CountLabel.setText("" + childOver8Count);
         });
 
+        //Quantity sub-panel
+        JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel quantityLabel = new JLabel("Quantity: ");
+        JLabel quantityCountLabel = new JLabel("" + quantity);
+        JButton quantityDecrement = new JButton("-");
+        JButton quantityIncrement = new JButton("+");
+        quantityPanel.add(quantityLabel);
+        quantityPanel.add(quantityDecrement);
+        quantityPanel.add(quantityCountLabel);
+        quantityPanel.add(quantityIncrement);
+
+        quantityIncrement.addActionListener(quantityActionEvent -> {
+            quantity++;
+            quantityCountLabel.setText("" + quantity);
+        });
+
+        quantityDecrement.addActionListener(quantityActionEvent -> {
+            if (quantity > 1){  
+                quantity--;
+            }
+            quantityCountLabel.setText("" + quantity);
+        });
+
         JButton deleteHamperButton = new JButton("Delete Hamper");
         deleteHamperButton.addActionListener(deleteHamperActionEvent -> {
             GUI.getMainPanel().remove(this.newHamperPanel);
             GUI.decrementCount();
+            GUI.updateCountText();
             GUI.removeHamperGUI(this);
             GUI.getMainPanel().revalidate();
             GUI.getMainPanel().repaint();
         });
+
         newHamperPanel.add(maleAdultsPanel);
         newHamperPanel.add(femaleAdultsPanel);
         newHamperPanel.add(childUnder8Panel);
         newHamperPanel.add(childOver8Panel);
+        newHamperPanel.add(quantityPanel);
         newHamperPanel.add(deleteHamperButton);
         newHamperPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     }
