@@ -1,6 +1,7 @@
-package edu.ucalgary.ensf409;
-
 import java.util.ArrayList;
+
+import javax.sound.sampled.SourceDataLine;
+
 import java.sql.*;
 
 public class FoodItemDatabase {
@@ -9,17 +10,178 @@ public class FoodItemDatabase {
     private ResultSet results;
 
     public FoodItemDatabase(){
-        fetchFromFoodDatabase();
+
+    }
+
+    public ArrayList<FoodItem> generateFoodItems(int targetWholeGrains, int targetVeggies, int targetProtein, int targetOther) {
+
+        ArrayList<FoodItem> hamper = new ArrayList<FoodItem>();
+        int currWholeGrains = 0;
+        int currProtein = 0;
+        int currOther = 0;
+        int currVeggies = 0;
+        int nutrition = 0;
+        int nutritionSatisfied = 0;
+        
+        while(nutritionSatisfied < 3){
+            
+            int bestNutrition = Integer.MIN_VALUE;
+            if(targetWholeGrains - currWholeGrains >= bestNutrition){
+                bestNutrition = targetWholeGrains - currWholeGrains;
+                nutrition = 0;
+            }
+            if(targetProtein - currProtein >= bestNutrition){
+                bestNutrition = targetProtein - currProtein;
+                nutrition = 1;
+            }
+            if(targetVeggies - currVeggies >= bestNutrition){
+                bestNutrition = targetVeggies - currVeggies;
+                nutrition = 2;
+            }
+            if(targetOther - currOther >= bestNutrition) {
+                bestNutrition = targetOther - currOther;
+                nutrition = 3;
+            }
+            
+            FoodItem bestItem = foodItemArray.get(0);
+            int lowestDifference = Integer.MAX_VALUE;
+    
+            for(int i = 0; i < foodItemArray.size(); i++){
+               FoodItem anItem = foodItemArray.get(i);
+                if(nutrition == 0){
+
+                    if(Math.abs((targetWholeGrains - currWholeGrains) - anItem.getGrainContent()) < lowestDifference){
+                        lowestDifference = Math.abs((targetWholeGrains - currWholeGrains) - anItem.getGrainContent());
+                        bestItem = anItem;
+                    }
+                    
+                }
+                else if(nutrition == 1){
+                    if(Math.abs((targetProtein - currProtein) - anItem.getProteinContent()) < lowestDifference){
+                        lowestDifference = Math.abs((targetProtein -currProtein) - anItem.getProteinContent());
+                        bestItem = anItem;
+                    }
+                }
+                else if(nutrition == 2){
+                    if(Math.abs((targetVeggies - currVeggies) - anItem.getFruitsVeggiesContent()) < lowestDifference){
+                        lowestDifference = Math.abs((targetVeggies - currVeggies) - anItem.getFruitsVeggiesContent());
+                        bestItem = anItem;
+                    }
+                }
+                else if(nutrition == 3){
+                    if(Math.abs((targetOther - currOther) - anItem.getOtherNutrition()) < lowestDifference){
+                        lowestDifference = Math.abs(targetOther - currOther - anItem.getOtherNutrition());
+                        bestItem = anItem;
+                    }
+                }
+            }
+            hamper.add(bestItem);
+            foodItemArray.remove(bestItem);
+            currOther += bestItem.getOtherNutrition();
+            currVeggies += bestItem.getFruitsVeggiesContent();
+            currProtein += bestItem.getProteinContent();
+            currWholeGrains += bestItem.getGrainContent();
+            nutritionSatisfied = 0;
+            if (currWholeGrains >= targetWholeGrains) {
+                nutritionSatisfied++;
+            }
+            if (currProtein >= targetProtein){
+                nutritionSatisfied++;
+            }
+            if (currVeggies >= targetVeggies){
+                nutritionSatisfied++;
+            }
+            if (currOther >= targetOther){
+                nutritionSatisfied++;
+            }
+        }
+        hamper = addLastFoodItem(targetWholeGrains, targetVeggies, targetProtein, targetOther, hamper);
+        
+        return hamper;
+    }
+
+    public ArrayList<FoodItem> addLastFoodItem(int targetWholeGrains, int targetVeggies, int targetProtein, int targetOther, ArrayList<FoodItem> hamper){
+        int currWholeGrains = 0;
+        int currVeggies = 0;
+        int currProtein = 0;
+        int currOther = 0;
+        for (int i = 0; i < hamper.size(); i++){
+            currWholeGrains += hamper.get(i).getGrainContent();
+            currVeggies += hamper.get(i).getFruitsVeggiesContent();
+            currProtein += hamper.get(i).getProteinContent();
+            currOther += hamper.get(i).getOtherNutrition();
+        }
+        int nutrition = -1;
+        if (currWholeGrains < targetWholeGrains){
+            nutrition = 0;
+        }
+        else if (currVeggies < targetVeggies){
+            nutrition = 1;
+        }
+        else if (currProtein < targetProtein){
+            nutrition = 2;
+        }
+        else{
+            nutrition = 3;
+        }
+
+        int highestDifference = Integer.MIN_VALUE;
+        FoodItem bestItem = null;
+
+        for(int i = 0; i < foodItemArray.size(); i++){
+            FoodItem anItem = foodItemArray.get(i);
+             if(nutrition == 0){
+
+                int difference = (targetWholeGrains - currWholeGrains) - anItem.getGrainContent();
+                if (difference < 0 && difference > highestDifference) {
+                    highestDifference = difference;
+                    bestItem = anItem;
+                }
+                 
+             }
+             else if(nutrition == 1){
+                 int difference = (targetVeggies - currVeggies) - anItem.getFruitsVeggiesContent();
+                if (difference < 0 && difference > highestDifference) {
+                    highestDifference = difference;
+                    bestItem = anItem;
+                }
+                
+             }
+             else if(nutrition == 2){
+                int difference = (targetProtein - currProtein) - anItem.getProteinContent();
+                if (difference < 0 && difference > highestDifference) {
+                    highestDifference = difference;
+                    bestItem = anItem;
+                }
+             }
+             else if(nutrition == 3){
+                int difference = (targetOther - currOther) - anItem.getOtherNutrition();
+                if (difference < 0 && difference > highestDifference) {
+                    highestDifference = difference;
+                    bestItem = anItem;
+                }
+             }
+         }
+         hamper.add(bestItem);
+         foodItemArray.remove(bestItem);
+        
+        return hamper;
     }
 
     public void fetchFromFoodDatabase(){
         try {
-            foodItemArray.clear();
-            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "user1", "ensf");
+            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "root", "");
             Statement myStatement = dbConnect.createStatement();
             results = myStatement.executeQuery("SELECT * FROM AVAILABLE_FOOD");
             while (results.next()){
-                FoodItem currFood = new FoodItem(results.getInt("ItemID"), results.getString("Name"), results.getInt("GrainContent"), results.getInt("FVContent"), results.getInt("ProContent"), results.getInt("Other"), results.getInt("Calories"));
+                int calories = results.getInt("calories");
+                FoodItem currFood = new FoodItem(results.getInt("ItemID"),
+                                                results.getString("Name"),
+                                                (int) (results.getInt("GrainContent")/100.0 * calories), 
+                                                (int) (results.getInt("FVContent")/100.0 * calories), 
+                                                (int) (results.getInt("ProContent")/100.0 * calories), 
+                                                (int) (results.getInt("Other")/100.0 * calories), 
+                                                results.getInt("Calories"));
                 foodItemArray.add(currFood);
             }
         }
@@ -32,10 +194,9 @@ public class FoodItemDatabase {
         for (int i = 0; i < foodItemArray.size(); i++){
             if (foodItemArray.get(i).getItemName().equals(foodName)){
                 foodItemArray.remove(i);
-                return;
+                break;
             }
         }
-        throw new IllegalArgumentException("Food Item " + foodName + " was not found in database");
     }
 
     public ArrayList<FoodItem> getFoodItemArray(){
@@ -73,15 +234,11 @@ public class FoodItemDatabase {
     public void printDatabase(){
         for (FoodItem currFoodItem : foodItemArray){
             System.out.println(currFoodItem.getItemName());
+            System.out.print(" " + currFoodItem.getGrainContent());
+            System.out.print(" " + currFoodItem.getFruitsVeggiesContent());
+            System.out.print(" " + currFoodItem.getProteinContent());
+            System.out.print(" " + currFoodItem.getOtherNutrition());
+            System.out.println("\n");
         }
-    }
-
-    public FoodItem getFoodItem(String foodItem){
-        for (FoodItem currFood : foodItemArray){
-            if (currFood.getItemName().equals(foodItem)){
-                return currFood;
-            }
-        }
-        throw new IllegalArgumentException("Food item does not exist into the database");
     }
 }
