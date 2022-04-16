@@ -9,7 +9,6 @@ import java.time.LocalTime;
 
 public class Order implements PrintOutput{
     private ArrayList<Hamper> hampers;
-    private ArrayList<String> hamperOutputs;
     
     /**
      * Initialize a new Order with a list of hampers

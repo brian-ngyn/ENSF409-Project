@@ -53,11 +53,26 @@ public class GUI{
 
         submitOrderButton.addActionListener(submitOrderActionEvent -> {
             ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
-            for (HamperGUI currHamper : hampersGUIArray){
-                tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildOver8Count(), currHamper.getChildUnder8Count(), currHamper.getQuantity()));
+            if (hampersGUIArray.isEmpty()){
+                validOrder = false;
             }
-            order = new Order(tempHamperArray);
-            validOrder = order.validateOrder();
+            else {
+                for (HamperGUI currHamper : hampersGUIArray){
+                    if (currHamper.getMaleAdultsCount() == 0 && currHamper.getFemaleAdultsCount() == 0 && currHamper.getChildOver8Count() == 0 && currHamper.getChildUnder8Count() == 0){
+                        break;
+                    }
+                    else {
+                        tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildOver8Count(), currHamper.getChildUnder8Count(), currHamper.getQuantity()));
+                    }
+                }
+                if (tempHamperArray.isEmpty()){
+                    validOrder = false;
+                }
+                else {
+                    order = new Order(tempHamperArray);
+                    validOrder = order.validateOrder();
+                }
+            }
             
             if (validOrder){
                 successLabel.setText("Success! Order is valid");
