@@ -3,6 +3,9 @@ package edu.ucalgary.ensf409;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Order implements PrintOutput{
     private ArrayList<Hamper> hampers;
@@ -41,13 +44,16 @@ public class Order implements PrintOutput{
         for (Hamper hamper: hampers){
             if (!hamper.validateHamper()){
                 valid = false;
-                return valid;
+                System.out.println("Line 44");
+                break;
             }
         }
         if (valid){
+            System.out.println("Line 48");
             printOrderForm();
             return valid;
         } else {
+            System.out.println("Line 52");
             System.out.println("Invalid hamper configuration. Please try again.");
             return valid;
         }
@@ -61,35 +67,36 @@ public class Order implements PrintOutput{
             FileWriter writer = new FileWriter("filename.txt");
             writer.write("Group 14 Food Bank\n");
             writer.write("Hamper Order Form\n");
-            writer.write("=================================\n");
             writer.write("\n");
-            writer.write("Original Request:\n");
+            writer.write("Name: Brian Nguyen, Will Perks, Ajay Arumugam, Dimitar Janevski\n");
+            writer.write("Date: " + LocalDate.now() + "\n\n");
+            writer.write("Original Request\n");
             // Write hamper summary to file
             for (int i = 0; i < hampers.size(); i++){
-                writer.write("Hamper " + i + "\n");
-                writer.write("--------------------\n");
+                writer.write("Hamper " + (i+1) + ": ");
                 if (hampers.get(i).getNumAdultsM() > 0){
-                    writer.write(hampers.get(i).getNumAdultsM() + " Adult Males\n");
+                    writer.write(hampers.get(i).getNumAdultsM() + " Adult Male, ");
                 }
                 if (hampers.get(i).getNumAdultsF() > 0){
-                    writer.write(hampers.get(i).getNumAdultsF() + " Adult Females\n");
-                }
-                if (hampers.get(i).getNumChildUnder8() > 0){
-                    writer.write(hampers.get(i).getNumChildUnder8() + " Children Under 8\n");
+                    writer.write(hampers.get(i).getNumAdultsF() + " Adult Female, ");
                 }
                 if (hampers.get(i).getNumChildOver8() > 0){
-                    writer.write(hampers.get(i).getNumChildOver8() + " Children Over 8\n");
+                    writer.write(hampers.get(i).getNumChildOver8() + " Children Over 8, ");
+                }
+                if (hampers.get(i).getNumChildUnder8() > 0){
+                    writer.write(hampers.get(i).getNumChildUnder8() + " Children Under 8");
                 }
                 writer.write("\n");
             }
+            writer.write("\n");
             // Write hamper details to file
             for (int i = 0; i < hampers.size(); i++){
-                writer.write("Hamper " + i + " items:\n");
-                FoodItem[] foodItems = hampers.get(i).getFoodItems();
+                writer.write("Hamper " + (i+1) + " Items:\n");
+                ArrayList<FoodItem> foodItems = hampers.get(i).getFoodItems();
                 for (FoodItem foodItem : foodItems){
-                    writer.write(String.format("%-15f %s\n", foodItem.getItemID(), foodItem.getItemName()));
+                    writer.write(foodItem.getItemID() + "\t\t" + foodItem.getItemName() + "\n");
                 }
-                writer.write("\n");
+                writer.write("\n\n");
             }
             writer.close();
           } catch (IOException e) {

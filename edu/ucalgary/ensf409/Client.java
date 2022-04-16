@@ -19,27 +19,27 @@ public class Client {
         this.OTHER = other;
     }
 
-    public int getCALORIES() {
+    public int getCalories() {
         return CALORIES;
     }
 
-    public int getWHOLEGRAINS() {
+    public int getWholeGrains() {
         return WHOLEGRAINS;
     }
 
-    public int getPROTEIN() {
+    public int getProtein() {
         return PROTEIN;
     }
 
-    public int getFRUITVEGGIES() {
+    public int getFruitVeggies() {
         return FRUITVEGGIES;
     }
 
-    public int getOTHER() {
+    public int getOther() {
         return OTHER;
     }
 
-    public String getCLIENTTYPE() {
+    public String getClientType() {
         return CLIENTTYPE;
     }
 }

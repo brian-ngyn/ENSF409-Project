@@ -19,7 +19,7 @@ public class ClientSingleton {
             Statement myStatement = dbConnect.createStatement();
             results = myStatement.executeQuery("SELECT * FROM DAILY_CLIENT_NEEDS");
             while (results.next()){
-                Client client = new Client(results.getInt("ClientID"), results.getString("Client"), results.getInt("WholeGrains"), results.getInt("FruitVeggies"), results.getInt("Protein"), results.getInt("Other"), results.getInt("Calories"));
+                Client client = new Client(results.getInt("ClientID"), results.getString("Client"), results.getInt("WholeGrains"), results.getInt("Protein"), results.getInt("FruitVeggies"), results.getInt("Calories"), results.getInt("Other"));
                 clients.put(results.getString("Client"), client);
             }
         }
@@ -36,6 +36,4 @@ public class ClientSingleton {
             return tempClient;
         }
     }
-
-
 }

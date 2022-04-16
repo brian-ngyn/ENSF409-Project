@@ -25,7 +25,7 @@ public class Hamper {
 	private int requiredProtein;
 	private int requiredOther;
 	private int requiredCalories;
-	private ArrayList<FoodItem> foodItems;
+	private ArrayList<FoodItem> foodItems = new ArrayList<FoodItem>();
 	private int quantity;
 	private FoodItemDatabase db;
 	
@@ -47,28 +47,38 @@ public class Hamper {
 		this.numAdultsM = numAdultM;
 		this.numAdultsF = numAdultF;
 		this.numChildOver8 = numChildOver8;
-		this.numChildUnder8 = numChildOver8;
+		this.numChildUnder8 = numChildUnder8;
 		this.quantity = numHampers;
-		ClientSingleton clients = ClientSingleton();
+		ClientSingleton clients = new ClientSingleton();
 		Client male = clients.getClient("Adult Male");
 		Client female = clients.getClient("Adult Female");
 		Client over8 = clients.getClient("Child over 8");
 		Client under8 = clients.getClient("Child under 8");
 		
-		requiredWholeGrains = (male.getWholeGrains() * numAdultM + female.getWholeGrains() * numAdultF 
-							+ over8.getWholeGrains() * numChildOver8 + under8.getWholeGrains() * numChildUnder8) * numHampers;
+		requiredWholeGrains = (int)((male.getWholeGrains() * numAdultM / 100.0 * male.getCalories()) + 
+								(female.getWholeGrains() * numAdultF / 100.0 * female.getCalories()) +
+								(over8.getWholeGrains() * numChildOver8 / 100.0 * over8.getCalories()) + 
+								(under8.getWholeGrains() * numChildUnder8 / 100.0 * under8.getCalories())) * numHampers;
 		
-		requiredFruitVeggies = (male.getFruitsVeggies() * numAdultM + female.getFruitsVeggies() * numAdultF
-							+ over8.getFruitsVeggies() * numChildOver8 + under8.getFruitsVeggies() * numChildUnder8) * numHampers;
+		requiredFruitVeggies = (int)((male.getFruitVeggies() * numAdultM / 100.0 * male.getCalories()) + 
+								(female.getFruitVeggies() * numAdultF / 100.0 * female.getCalories()) +
+								(over8.getFruitVeggies() * numChildOver8 / 100.0 * over8.getCalories()) + 
+								(under8.getFruitVeggies() * numChildUnder8 / 100.0 * under8.getCalories())) * numHampers;
 		
-		requiredProtein = (male.getProtein() * numAdultM + female.getProtein() * numAdultF
-						+ over8.getProtein() * numChildOver8 + under8.getProtein() * numChildUnder8) * numHampers;
+		requiredProtein = (int)((male.getProtein() * numAdultM / 100.0 * male.getCalories()) + 
+							(female.getProtein() * numAdultF / 100.0 * female.getCalories()) +
+							(over8.getProtein() * numChildOver8 / 100.0 * over8.getCalories()) + 
+							(under8.getProtein() * numChildUnder8 / 100.0 * under8.getCalories())) * numHampers;
 		
-		requiredOther = (male.getOther() * numAdultM + female.getOther() * numAdultF
-						+ over8.getOther() * numChildOver8 + under8.getOther() * numChildUnder8) * numHampers;
-		
+		requiredOther = (int)((male.getOther() * numAdultM / 100.0 * male.getCalories()) + 
+							(female.getOther() * numAdultF / 100.0 * female.getCalories()) +
+							(over8.getOther() * numChildOver8 / 100.0 * over8.getCalories()) + 
+							(under8.getOther() * numChildUnder8 / 100.0 * under8.getCalories())) * numHampers;
+
 		requiredCalories = (male.getCalories() * numAdultM + female.getCalories() * numAdultF
 						+ over8.getCalories() * numChildOver8 + under8.getCalories() * numChildUnder8) * numHampers;
+
+		createHamper();
 	}
 	
 	/**
@@ -76,19 +86,15 @@ public class Hamper {
 	 */
 	public void createHamper() {
 		foodItems = db.generateFoodItems(requiredWholeGrains, requiredFruitVeggies, requiredProtein, requiredOther);
-		updateItems();
-	}
-	
-	/**
-	 * This function will updated the database after the hamper has been successfully created 
-	 */
-	private void updateItems() {
-		for (int i = 0; i < foodItems.length(); i++) {
-			db.deleteItem(foodItems.get(i).getItemName());
+		for (FoodItem currFoodItem : foodItems){
+			totalWholeGrains += currFoodItem.getGrainContent();
+			totalFruitVeggies += currFoodItem.getFruitsVeggiesContent();
+			totalProtein += currFoodItem.getProteinContent();
+			totalOther += currFoodItem.getOtherNutrition();
+			totalCalories += currFoodItem.getCalories();
 		}
-		db.updateDatabase();
 	}
-	
+
 	/**
 	 * This function will return true if all the requirements are less than or equal 
 	 * to the current total nutrition values, false otherwise
@@ -97,6 +103,7 @@ public class Hamper {
 	public boolean validateHamper() {
 		if(totalWholeGrains >= requiredWholeGrains && totalFruitVeggies >= requiredFruitVeggies && 
 		totalProtein >= requiredProtein && totalOther >= requiredOther && totalCalories >= requiredCalories) {
+			db.updateDatabase();
 			return true;
 		}
 		return false;

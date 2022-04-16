@@ -1,7 +1,6 @@
+package edu.ucalgary.ensf409;
+
 import java.util.ArrayList;
-
-import javax.sound.sampled.SourceDataLine;
-
 import java.sql.*;
 
 public class FoodItemDatabase {
@@ -10,11 +9,10 @@ public class FoodItemDatabase {
     private ResultSet results;
 
     public FoodItemDatabase(){
-
+        fetchFromFoodDatabase();
     }
 
     public ArrayList<FoodItem> generateFoodItems(int targetWholeGrains, int targetVeggies, int targetProtein, int targetOther) {
-
         ArrayList<FoodItem> hamper = new ArrayList<FoodItem>();
         int currWholeGrains = 0;
         int currProtein = 0;
@@ -96,7 +94,6 @@ public class FoodItemDatabase {
             }
         }
         hamper = addLastFoodItem(targetWholeGrains, targetVeggies, targetProtein, targetOther, hamper);
-        
         return hamper;
     }
 
@@ -162,19 +159,19 @@ public class FoodItemDatabase {
                 }
              }
          }
-         hamper.add(bestItem);
-         foodItemArray.remove(bestItem);
-        
+        hamper.add(bestItem);
+        foodItemArray.remove(bestItem);
+
         return hamper;
     }
 
     public void fetchFromFoodDatabase(){
         try {
-            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "root", "");
+            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "user1", "ensf");
             Statement myStatement = dbConnect.createStatement();
             results = myStatement.executeQuery("SELECT * FROM AVAILABLE_FOOD");
             while (results.next()){
-                int calories = results.getInt("calories");
+                int calories = results.getInt("Calories");
                 FoodItem currFood = new FoodItem(results.getInt("ItemID"),
                                                 results.getString("Name"),
                                                 (int) (results.getInt("GrainContent")/100.0 * calories), 
@@ -194,9 +191,10 @@ public class FoodItemDatabase {
         for (int i = 0; i < foodItemArray.size(); i++){
             if (foodItemArray.get(i).getItemName().equals(foodName)){
                 foodItemArray.remove(i);
-                break;
+                return;
             }
         }
+        throw new IllegalArgumentException("Food Item: " + foodName + " was not found in database");
     }
 
     public ArrayList<FoodItem> getFoodItemArray(){
@@ -215,15 +213,15 @@ public class FoodItemDatabase {
 
         for (FoodItem currFoodItem : foodItemArray){
             String itemName = currFoodItem.getItemName();
-            int grainContent = currFoodItem.getGrainContent();
-            int fruitVeggiesContent = currFoodItem.getFruitsVeggiesContent();
-            int proteinContent = currFoodItem.getProteinContent();
-            int otherNutrition = currFoodItem.getOtherNutrition();
+            double grainContent = (double)currFoodItem.getGrainContent() / (double)currFoodItem.getCalories() * 100.0;
+            double fruitVeggiesContent = (double)currFoodItem.getFruitsVeggiesContent() / (double)currFoodItem.getCalories() * 100.0;
+            double proteinContent = (double)currFoodItem.getProteinContent() / (double)currFoodItem.getCalories() * 100.0;
+            double otherNutrition = (double)currFoodItem.getOtherNutrition() / (double)currFoodItem.getCalories() * 100.0;
             int calories = currFoodItem.getCalories();
 
             try{
                 Statement updateDatabaseStatement = dbConnect.createStatement();
-                int executeUpdateDatabaseStatus = updateDatabaseStatement.executeUpdate("INSERT INTO AVAILABLE_FOOD(Name, GrainContent, FVContent, ProContent, Other, Calories)VALUES('"+ itemName + "', " + grainContent +", " + fruitVeggiesContent +", " + proteinContent + ", " + otherNutrition + ", " + calories + ")");
+                int executeUpdateDatabaseStatus = updateDatabaseStatement.executeUpdate("INSERT INTO AVAILABLE_FOOD(Name, GrainContent, FVContent, ProContent, Other, Calories)VALUES('"+ itemName + "', " + (int)grainContent +", " + (int)fruitVeggiesContent +", " + (int)proteinContent + ", " + (int)otherNutrition + ", " + calories + ")");
             }
             catch (SQLException e){
                 e.printStackTrace();
@@ -240,5 +238,14 @@ public class FoodItemDatabase {
             System.out.print(" " + currFoodItem.getOtherNutrition());
             System.out.println("\n");
         }
+    }
+
+    public FoodItem getFoodItem(String foodItem){
+        for (FoodItem currFood : foodItemArray){
+            if (currFood.getItemName().equals(foodItem)){
+                return currFood;
+            }
+        }
+        throw new IllegalArgumentException("Food item does not exist into the database");
     }
 }

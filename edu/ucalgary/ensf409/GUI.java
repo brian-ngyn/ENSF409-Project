@@ -52,18 +52,14 @@ class GUI{
         submitOrderPanel.add(successLabel);
 
         submitOrderButton.addActionListener(submitOrderActionEvent -> {
-            if (validOrder){
-                validOrder = false;
+            ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
+            for (HamperGUI currHamper : hampersGUIArray){
+                System.out.println(currHamper.getMaleAdultsCount() + " " + currHamper.getFemaleAdultsCount() + " " + currHamper.getChildOver8Count() + " " + currHamper.getChildUnder8Count());
+                tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildOver8Count(), currHamper.getChildUnder8Count(), currHamper.getQuantity()));
             }
-            else {
-                validOrder = true;
-            }
-            // ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
-            // for (HamperGUI currHamper : hampersGUIArray){
-            //     tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildUnder8Count(), currHamper.getChildOver8Count(), 1));
-            // }
-            // order = new Order(tempHamperArray);
-            // validOrder = order.validateOrder();
+            order = new Order(tempHamperArray);
+            validOrder = order.validateOrder();
+            System.out.println("Line 61 " + validOrder);
             
             if (validOrder){
                 successLabel.setText("Success! Order is valid");
@@ -106,8 +102,8 @@ class GUI{
 class HamperGUI extends Frame{
     private int maleAdultsCount;
     private int femaleAdultsCount;
-    private int childUnder8Count;
     private int childOver8Count;
+    private int childUnder8Count;
     private int quantity = 1;
     private JPanel newHamperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     private JLabel hamperNumber;
@@ -164,29 +160,6 @@ class HamperGUI extends Frame{
             femaleAdultsCountLabel.setText("" + femaleAdultsCount);
         });
 
-        // Child under 8 sub-panel
-        JPanel childUnder8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel childUnder8Label = new JLabel("Number of Childen under 8: ");
-        JLabel childUnder8CountLabel = new JLabel("" + childUnder8Count);
-        JButton childUnder8Decrement = new JButton("-");
-        JButton childUnder8Increment = new JButton("+");
-        childUnder8Panel.add(childUnder8Label);
-        childUnder8Panel.add(childUnder8Decrement);
-        childUnder8Panel.add(childUnder8CountLabel);
-        childUnder8Panel.add(childUnder8Increment);
-
-        childUnder8Increment.addActionListener(childUnder8ActionEvent -> {
-            childUnder8Count++;
-            childUnder8CountLabel.setText("" + childUnder8Count);
-        });
-
-        childUnder8Decrement.addActionListener(childUnder8ActionEvent -> {
-            if (childUnder8Count > 0){
-                childUnder8Count--;
-            }
-            childUnder8CountLabel.setText("" + childUnder8Count);
-        });
-
         // Child over 8 sub-panel
         JPanel childOver8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel childOver8Label = new JLabel("Number of Children over 8: ");
@@ -208,6 +181,29 @@ class HamperGUI extends Frame{
                 childOver8Count--;
             }
             childOver8CountLabel.setText("" + childOver8Count);
+        });
+
+        // Child under 8 sub-panel
+        JPanel childUnder8Panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel childUnder8Label = new JLabel("Number of Childen under 8: ");
+        JLabel childUnder8CountLabel = new JLabel("" + childUnder8Count);
+        JButton childUnder8Decrement = new JButton("-");
+        JButton childUnder8Increment = new JButton("+");
+        childUnder8Panel.add(childUnder8Label);
+        childUnder8Panel.add(childUnder8Decrement);
+        childUnder8Panel.add(childUnder8CountLabel);
+        childUnder8Panel.add(childUnder8Increment);
+
+        childUnder8Increment.addActionListener(childUnder8ActionEvent -> {
+            childUnder8Count++;
+            childUnder8CountLabel.setText("" + childUnder8Count);
+        });
+
+        childUnder8Decrement.addActionListener(childUnder8ActionEvent -> {
+            if (childUnder8Count > 0){
+                childUnder8Count--;
+            }
+            childUnder8CountLabel.setText("" + childUnder8Count);
         });
 
         //Quantity sub-panel
@@ -233,6 +229,7 @@ class HamperGUI extends Frame{
             quantityCountLabel.setText("" + quantity);
         });
 
+        //Delete hamper sub-panel
         JButton deleteHamperButton = new JButton("Delete Hamper");
         deleteHamperButton.addActionListener(deleteHamperActionEvent -> {
             GUI.getMainPanel().remove(this.newHamperPanel);
@@ -245,8 +242,8 @@ class HamperGUI extends Frame{
 
         newHamperPanel.add(maleAdultsPanel);
         newHamperPanel.add(femaleAdultsPanel);
-        newHamperPanel.add(childUnder8Panel);
         newHamperPanel.add(childOver8Panel);
+        newHamperPanel.add(childUnder8Panel);
         newHamperPanel.add(quantityPanel);
         newHamperPanel.add(deleteHamperButton);
         newHamperPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -270,6 +267,10 @@ class HamperGUI extends Frame{
 
     public int getChildOver8Count(){
         return this.childOver8Count;
+    }
+
+    public int getQuantity(){
+        return this.quantity;
     }
 
     public JLabel getHamperNumber(){
