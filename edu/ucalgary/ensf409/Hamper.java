@@ -43,7 +43,6 @@ public class Hamper {
 		if(numAdultM < 0 || numAdultF < 0 || numChildOver8 < 0 || numChildUnder8 < 0 || numHampers < 0) {
 			throw new IllegalArgumentException("Invalid input");
 		}
-		db = new FoodItemDatabase();
 		this.numAdultsM = numAdultM;
 		this.numAdultsF = numAdultF;
 		this.numChildOver8 = numChildOver8;
@@ -77,8 +76,6 @@ public class Hamper {
 
 		requiredCalories = (male.getCalories() * numAdultM + female.getCalories() * numAdultF
 						+ over8.getCalories() * numChildOver8 + under8.getCalories() * numChildUnder8) * numHampers;
-
-		createHamper();
 	}
 	
 	/**
@@ -86,7 +83,13 @@ public class Hamper {
 	 */
 	public void createHamper() {
 		foodItems = db.generateFoodItems(requiredWholeGrains, requiredFruitVeggies, requiredProtein, requiredOther);
+		if (foodItems.isEmpty()){
+			return;
+		}
 		for (FoodItem currFoodItem : foodItems){
+			if (currFoodItem == null){
+				return;
+			}
 			totalWholeGrains += currFoodItem.getGrainContent();
 			totalFruitVeggies += currFoodItem.getFruitsVeggiesContent();
 			totalProtein += currFoodItem.getProteinContent();
@@ -101,6 +104,8 @@ public class Hamper {
 	 * @return
 	 */
 	public boolean validateHamper() {
+		db = new FoodItemDatabase();
+		createHamper();
 		if(totalWholeGrains >= requiredWholeGrains && totalFruitVeggies >= requiredFruitVeggies && 
 		totalProtein >= requiredProtein && totalOther >= requiredOther && totalCalories >= requiredCalories) {
 			db.updateDatabase();

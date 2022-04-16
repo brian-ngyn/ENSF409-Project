@@ -44,17 +44,13 @@ public class Order implements PrintOutput{
         for (Hamper hamper: hampers){
             if (!hamper.validateHamper()){
                 valid = false;
-                System.out.println("Line 44");
                 break;
             }
         }
         if (valid){
-            System.out.println("Line 48");
             printOrderForm();
             return valid;
         } else {
-            System.out.println("Line 52");
-            System.out.println("Invalid hamper configuration. Please try again.");
             return valid;
         }
     }
@@ -74,18 +70,20 @@ public class Order implements PrintOutput{
             // Write hamper summary to file
             for (int i = 0; i < hampers.size(); i++){
                 writer.write("Hamper " + (i+1) + ": ");
+                StringBuilder requestToWrite = new StringBuilder();
                 if (hampers.get(i).getNumAdultsM() > 0){
-                    writer.write(hampers.get(i).getNumAdultsM() + " Adult Male, ");
+                    requestToWrite.append(hampers.get(i).getNumAdultsM() + " Adult Male, ");
                 }
                 if (hampers.get(i).getNumAdultsF() > 0){
-                    writer.write(hampers.get(i).getNumAdultsF() + " Adult Female, ");
+                    requestToWrite.append(hampers.get(i).getNumAdultsF() + " Adult Female, ");
                 }
                 if (hampers.get(i).getNumChildOver8() > 0){
-                    writer.write(hampers.get(i).getNumChildOver8() + " Children Over 8, ");
+                    requestToWrite.append(hampers.get(i).getNumChildOver8() + " Children Over 8, ");
                 }
                 if (hampers.get(i).getNumChildUnder8() > 0){
-                    writer.write(hampers.get(i).getNumChildUnder8() + " Children Under 8");
+                    requestToWrite.append(hampers.get(i).getNumChildUnder8() + " Children Under 8, ");
                 }
+                writer.write(requestToWrite.substring(0, requestToWrite.length()-2));
                 writer.write("\n");
             }
             writer.write("\n");

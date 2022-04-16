@@ -41,6 +41,9 @@ public class FoodItemDatabase {
                 nutrition = 3;
             }
             
+            if (foodItemArray.isEmpty()){
+                return hamper;
+            }
             FoodItem bestItem = foodItemArray.get(0);
             int lowestDifference = Integer.MAX_VALUE;
     
