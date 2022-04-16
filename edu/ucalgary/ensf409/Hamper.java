@@ -99,19 +99,23 @@ public class Hamper {
 	}
 
 	/**
-	 * This function will return true if all the requirements are less than or equal 
+	 * This function will verify that the hamper is not empty, and will return true if all the requirements are less than or equal 
 	 * to the current total nutrition values, false otherwise
 	 * @return
 	 */
 	public boolean validateHamper() {
-		db = new FoodItemDatabase();
-		createHamper();
-		if(totalWholeGrains >= requiredWholeGrains && totalFruitVeggies >= requiredFruitVeggies && 
-		totalProtein >= requiredProtein && totalOther >= requiredOther && totalCalories >= requiredCalories) {
-			db.updateDatabase();
-			return true;
+		if (numAdultsM == 0 && numAdultsF == 0 && numChildOver8 == 0 && numChildUnder8 == 0){
+			return false;
+		} else {
+			db = new FoodItemDatabase();
+			createHamper();
+			if(totalWholeGrains >= requiredWholeGrains && totalFruitVeggies >= requiredFruitVeggies && 
+			totalProtein >= requiredProtein && totalOther >= requiredOther && totalCalories >= requiredCalories) {
+				db.updateDatabase();
+				return true;
+			}
+			return false;
 		}
-		return false;
 	}
 	
 	// Getters //
