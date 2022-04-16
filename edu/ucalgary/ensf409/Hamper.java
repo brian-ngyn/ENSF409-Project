@@ -90,11 +90,11 @@ public class Hamper {
 			if (currFoodItem == null){
 				return;
 			}
-			totalWholeGrains += currFoodItem.getGrainContent();
-			totalFruitVeggies += currFoodItem.getFruitsVeggiesContent();
-			totalProtein += currFoodItem.getProteinContent();
-			totalOther += currFoodItem.getOtherNutrition();
-			totalCalories += currFoodItem.getCalories();
+			totalWholeGrains += (int)(currFoodItem.getGrainContent() / 100.0 * currFoodItem.getCalories());
+			totalFruitVeggies += (int)(currFoodItem.getFruitsVeggiesContent() / 100.0 * currFoodItem.getCalories());
+			totalProtein += (int)(currFoodItem.getProteinContent() / 100.0 * currFoodItem.getCalories());
+			totalOther += (int)(currFoodItem.getOtherNutrition() / 100.0 * currFoodItem.getCalories());
+			totalCalories += (int)(currFoodItem.getCalories() / 100.0 * currFoodItem.getCalories());
 		}
 	}
 
