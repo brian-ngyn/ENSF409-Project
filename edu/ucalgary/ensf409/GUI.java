@@ -78,9 +78,12 @@ public class GUI{
 
                     if (validOrder){
                         successLabel.setText("Success! Order is valid");
+                        JOptionPane.showMessageDialog(null, order.getHamperForm());
                         for (HamperGUI currHamperGUI : hampersGUIArray){
                             mainPanel.remove(currHamperGUI.getPanel());
                         }
+                        hamperCount = 0;
+                        updateCountText();
                         hampersGUIArray.clear();
                         mainPanel.revalidate();
                         mainPanel.repaint();

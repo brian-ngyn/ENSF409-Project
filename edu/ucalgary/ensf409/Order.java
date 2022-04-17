@@ -57,6 +57,19 @@ public class Order implements PrintOutput{
         }
     }
 
+    public String getHamperForm(){
+        StringBuilder returnString = new StringBuilder();
+        for (int i = 0; i < hampers.size(); i++){
+            returnString.append("Hamper " + (i+1) + " Items:\n");
+            ArrayList<FoodItem> foodItems = hampers.get(i).getFoodItems();
+            for (FoodItem foodItem : foodItems){
+                returnString.append(foodItem.getItemID() + "\t\t" + foodItem.getItemName() + "\n");
+            }
+            returnString.append("\n\n");
+            }
+        return returnString.toString();
+    }
+
     /**
      * Prints out the order form for a successful order. Includes a title, and summary and item details for each hamper.
      */
@@ -99,8 +112,8 @@ public class Order implements PrintOutput{
                 writer.write("\n\n");
             }
             writer.close();
-          } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-          }
+        }
     }
 }
