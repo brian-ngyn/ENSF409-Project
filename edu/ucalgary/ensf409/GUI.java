@@ -8,7 +8,7 @@ public class GUI{
     private static int hamperCount;
     private static ArrayList<HamperGUI> hampersGUIArray = new ArrayList<>();
     private static Order order;
-    static boolean validOrder = false;
+    static int validOrder = 0;
     static JFrame mainFrame = new JFrame("Food Bank Hamper Creator");
     static JPanel mainPanel = new JPanel();
     static JLabel hamperLabel = new JLabel("Number of Hampers: 0");
@@ -54,13 +54,13 @@ public class GUI{
         submitOrderButton.addActionListener(submitOrderActionEvent -> {
             ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
             if (hampersGUIArray.isEmpty()){
-                validOrder = false;
+                validOrder = 0;
                 successLabel.setText("Error! Order is invalid, you did not add a hamper");
             }
             else {
                 for (HamperGUI currHamper : hampersGUIArray){
                     if (currHamper.getMaleAdultsCount() == 0 && currHamper.getFemaleAdultsCount() == 0 && currHamper.getChildOver8Count() == 0 && currHamper.getChildUnder8Count() == 0){
-                        validOrder = false;
+                        validOrder = 0;
                         successLabel.setText("Error! Order is invalid, one of the hampers has no clients");
                         return;
                     }
@@ -69,14 +69,14 @@ public class GUI{
                     }
                 }
                 if (tempHamperArray.isEmpty()){
-                    validOrder = false;
+                    validOrder = 0;
                     successLabel.setText("Error! Order is invalid, one of the hampers has no clients");
                 }
                 else {
                     order = new Order(tempHamperArray);
                     validOrder = order.validateOrder();
 
-                    if (validOrder){
+                    if (validOrder == 1){
                         successLabel.setText("Success! Order is valid");
                         JOptionPane.showMessageDialog(null, order.getHamperForm());
                         for (HamperGUI currHamperGUI : hampersGUIArray){
@@ -88,8 +88,17 @@ public class GUI{
                         mainPanel.revalidate();
                         mainPanel.repaint();
                     }
-                    else {
-                        successLabel.setText("Error! Order is invalid");
+                    else if (validOrder == -1){
+                        successLabel.setText("Error! Not enough whole grains to fullfill the order");
+                    }
+                    else if (validOrder == -2){
+                        successLabel.setText("Error! Not enough fruits/veggies to fullfill the order");
+                    }
+                    else if (validOrder == -3){
+                        successLabel.setText("Error! Not enough protein to fullfill the order");
+                    }
+                    else if (validOrder == -4){
+                        successLabel.setText("Error! Not enough other nutrition to fullfill the order");
                     }
                 }
             }

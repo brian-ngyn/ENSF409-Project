@@ -117,6 +117,22 @@ public class Hamper {
 			return false;
 		}
 	}
+
+	public int getError(){
+		if(!(totalWholeGrains >= requiredWholeGrains)){
+			return -1;
+		}
+		if (!(totalFruitVeggies >= requiredFruitVeggies)){
+			return -2;
+		} 
+		if (!(totalProtein >= requiredProtein)){
+			return -3;
+		}
+		if (!(totalOther >= requiredOther)){
+			return -4;
+		}
+		return 1;
+	}
 	
 	// Getters //
 	public int getNumberOfHampers() {

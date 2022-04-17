@@ -38,23 +38,15 @@ public class Order implements PrintOutput{
      * Verify that all hampers in order can be built. If a hamper cannot be built,
      * print out an error message, otherwise, output the order form 
      */
-    public boolean validateOrder(){
-        boolean valid = true;
+    public int validateOrder(){
+        int valid = 1;
         for (Hamper hamper: hampers){
             if (!hamper.validateHamper()){
-                valid = false;
-                break;
+                return hamper.getError();
             }
         }
-        if (hampers.size() == 0){
-            valid = false;
-        }
-        if (valid){
-            printOrderForm();
-            return valid;
-        } else {
-            return valid;
-        }
+        printOrderForm();
+        return 1;
     }
 
     public String getHamperForm(){
