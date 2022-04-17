@@ -55,11 +55,14 @@ public class GUI{
             ArrayList<Hamper> tempHamperArray = new ArrayList<Hamper>();
             if (hampersGUIArray.isEmpty()){
                 validOrder = false;
+                successLabel.setText("Error! Order is invalid, you did not add a hamper");
             }
             else {
                 for (HamperGUI currHamper : hampersGUIArray){
                     if (currHamper.getMaleAdultsCount() == 0 && currHamper.getFemaleAdultsCount() == 0 && currHamper.getChildOver8Count() == 0 && currHamper.getChildUnder8Count() == 0){
-                        break;
+                        validOrder = false;
+                        successLabel.setText("Error! Order is invalid, one of the hampers has no clients");
+                        return;
                     }
                     else {
                         tempHamperArray.add(new Hamper(currHamper.getMaleAdultsCount(), currHamper.getFemaleAdultsCount(), currHamper.getChildOver8Count(), currHamper.getChildUnder8Count(), currHamper.getQuantity()));
@@ -67,18 +70,25 @@ public class GUI{
                 }
                 if (tempHamperArray.isEmpty()){
                     validOrder = false;
+                    successLabel.setText("Error! Order is invalid, one of the hampers has no clients");
                 }
                 else {
                     order = new Order(tempHamperArray);
                     validOrder = order.validateOrder();
+
+                    if (validOrder){
+                        successLabel.setText("Success! Order is valid");
+                        for (HamperGUI currHamperGUI : hampersGUIArray){
+                            mainPanel.remove(currHamperGUI.getPanel());
+                        }
+                        hampersGUIArray.clear();
+                        mainPanel.revalidate();
+                        mainPanel.repaint();
+                    }
+                    else {
+                        successLabel.setText("Error! Order is invalid");
+                    }
                 }
-            }
-            
-            if (validOrder){
-                successLabel.setText("Success! Order is valid");
-            }
-            else {
-                successLabel.setText("Error! Order is invalid");
             }
         });
 

@@ -59,12 +59,12 @@ public class Order implements PrintOutput{
      */
     public void printOrderForm(){
         try {
-            FileWriter writer = new FileWriter("filename.txt");
+            FileWriter writer = new FileWriter("OrderForm.txt");
             writer.write("Group 14 Food Bank\n");
             writer.write("Hamper Order Form\n");
             writer.write("\n");
-            writer.write("Name: Brian Nguyen, Will Perks, Ajay Arumugam, Dimitar Janevski\n");
-            writer.write("Date: " + LocalDate.now() + "\n\n");
+            writer.write("Name:\n");
+            writer.write("Date: " + "\n\n");
             writer.write("Original Request\n");
             // Write hamper summary to file
             for (int i = 0; i < hampers.size(); i++){
