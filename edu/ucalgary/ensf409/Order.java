@@ -46,6 +46,9 @@ public class Order implements PrintOutput{
                 break;
             }
         }
+        if (hampers.size() == 0){
+            valid = false;
+        }
         if (valid){
             printOrderForm();
             return valid;
