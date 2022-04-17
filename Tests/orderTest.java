@@ -7,6 +7,10 @@ import static org.junit.Assert.*;
 import java.beans.Transient;
 import java.util.ArrayList;
 
+/**
+ * NOTE: Majority of invalid hamper input is handled by the GUI. For example,
+ * negative quantities are not allowed, and empty hampers are caught by the GUI
+ */
 public class orderTest {
     /**
      * The constructor should create a valid Order object given a valid Hamper ArrayList
