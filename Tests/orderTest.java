@@ -29,7 +29,7 @@ public class orderTest {
     @Test
     public void testGetHampers(){
         ArrayList<Hamper> expectedHampers = new ArrayList<Hamper>();
-        hampers.add(new Hamper(1,1,1,1,1));
+        expectedHampers.add(new Hamper(1,1,1,1,1));
         Order order = new Order(expectedHampers);
         ArrayList<Hamper> actualHampers = order.getHampers();
         assertEquals("Method getHampers did not return expected value: ", expectedHampers, actualHampers);
@@ -41,8 +41,8 @@ public class orderTest {
     public void testValidAddHamper(){
         ArrayList<Hamper> expectedHampers = new ArrayList<Hamper>();
         expectedHampers.add(new Hamper(1,1,0,0,1));
+        Order order = new Order(expectedHampers);
         expectedHampers.add(new Hamper(1,2,0,0,1));
-        Order order = new Order(expectedHampers.get(0));
         Hamper newHamper = new Hamper(1,2,0,0,1);
         order.addHamper(newHamper);
         ArrayList<Hamper> actualHampers = order.getHampers();
