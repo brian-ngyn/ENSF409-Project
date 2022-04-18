@@ -3,48 +3,95 @@ package edu.ucalgary.ensf409;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-
-
 public class clientTest {
-    public static final int expectedWholeGrains = 100;
-    public static final int expectedFruitVeggies = 50;
-    public static final int expectedProtein = 150;
-    public static final int expectedOther = 200;
-    public static final int expectedCalories = 2500;
-    public static Client testClient = new Client("12", "Adult Male", [100, 50, 150, 200, 2500]);
 
+    /**
+     * test getWholeGrains()
+     */
     @Test
     public void testGetWholeGrains() {
-        System.out.println("Test get whole grains");
-        int wholeGrains = testClient.getWholeGrains();
-        assertEquals("getWholeGrains was incorrect: ", wholeGrains, expectedWholeGrains);
+        int clientID = 1;
+        String clientType = "Adult Male";
+        int expectedWholeGrains = 100;
+        int expectedFruitVeggies = 50;
+        int expectedProtein = 150;
+        int expectedOther = 200;
+        int expectedCalories = 2500;
+        Client testClient = new Client(clientID, clientType, expectedWholeGrains, expectedProtein, expectedFruitVeggies,
+                expectedCalories, expectedOther);
+        int resultWholeGrains = testClient.getWholeGrains();
+        assertEquals("Expected Whole Grains was incorrect: ", expectedWholeGrains, resultWholeGrains);
     }
 
+    /**
+     * test getFruitVeggies()
+     */
     @Test
     public void testGetFruitVeggies() {
-        System.out.println("Test get fruit veggies");
-        int fruitVeggies = testClient.getFruitVeggies();
-        assertEquals("getFruitVeggies was incorrect: ", fruitVeggies, expectedFruitVeggies);
+        int clientID = 1;
+        String clientType = "Adult Male";
+        int expectedWholeGrains = 100;
+        int expectedFruitVeggies = 50;
+        int expectedProtein = 150;
+        int expectedOther = 200;
+        int expectedCalories = 2500;
+        Client testClient = new Client(clientID, clientType, expectedWholeGrains, expectedProtein, expectedFruitVeggies,
+                expectedCalories, expectedOther);
+        int resultFruitVeggies = testClient.getFruitVeggies();
+        assertEquals("Expected Fruit Veggies was incorrect: ", expectedFruitVeggies, resultFruitVeggies);
     }
 
+    /**
+     * test getProtein()
+     */
     @Test
     public void testGetProtein() {
-        System.out.println("Test get protein");
-        int protein = testClient.getProtein();
-        assertEquals("getProtein was incorrect: ", protein, expectedProtein);
+        int clientID = 1;
+        String clientType = "Adult Male";
+        int expectedWholeGrains = 100;
+        int expectedFruitVeggies = 50;
+        int expectedProtein = 150;
+        int expectedOther = 200;
+        int expectedCalories = 2500;
+        Client testClient = new Client(clientID, clientType, expectedWholeGrains, expectedProtein, expectedFruitVeggies,
+                expectedCalories, expectedOther);
+        int resultProtein = testClient.getProtein();
+        assertEquals("Expected Protein was incorrect: ", expectedProtein, resultProtein);
     }
 
+    /**
+     * test getOther()
+     */
     @Test
     public void testGetOther() {
-        System.out.println("Test get other");
-        int other = testClient.getOther();
-        assertEquals("getOther was incorrect: ", other, expectedOther);
+        int clientID = 1;
+        String clientType = "Adult Male";
+        int expectedWholeGrains = 100;
+        int expectedFruitVeggies = 50;
+        int expectedProtein = 150;
+        int expectedOther = 200;
+        int expectedCalories = 2500;
+        Client testClient = new Client(clientID, clientType, expectedWholeGrains, expectedProtein, expectedFruitVeggies,
+                expectedCalories, expectedOther);
+        int resultOther = testClient.getOther();
+        assertEquals("Expected Other was incorrect: ", expectedOther, resultOther);
     }
 
+    /**
+     * test getCalories()
+     */
     @Test
     public void testGetCalories() {
-        System.out.println("Test get calories");
-        int calories = testClient.getCalories();
-        assertEquals("getCalories was incorrect: ", calories, expectedCalories);
+        int clientID = 1;
+        String clientType = "Adult Male";
+        int expectedWholeGrains = 100;
+        int expectedFruitVeggies = 50;
+        int expectedProtein = 150;
+        int expectedOther = 200;
+        int expectedCalories = 2500;
+        Client testClient = new Client(clientID, clientType, expectedWholeGrains, expectedProtein, expectedFruitVeggies,
+                expectedCalories, expectedOther);
+        int resultCalories = testClient.getCalories();
+        assertEquals("Expected Calories was incorrect: ", expectedCalories, resultCalories);
     }
 }

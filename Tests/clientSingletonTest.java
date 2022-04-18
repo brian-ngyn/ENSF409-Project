@@ -7,29 +7,44 @@ import java.util.ArrayList;
 
 
 public class clientSingletonTest {
-    Client expectedClient1 = new Client("12", "Adult Male", [100, 50, 150, 200, 2500]);
-    Client expectedClient2 = new Client("12", "Adult Female", [80, 40, 110, 190, 2000]);
-    Client expectedClient3 = new Client("12", "Child Under 8", [40, 20, 70, 1000, 1000]);
-    Client expectedClient4 = new Client("12", "Child Over 8", [60, 30, 100, 100, 1500]);
 
-    ArrayList<Client> expectedArrayList = new ArrayList<Client>();
-    expectedArrayList.append(expectedClient1);
-    expectedArrayList.append(expectedClient2);
-    expectedArrayList.append(expectedClient3);
-    expectedArrayList.append(expectedClient4);
+    /**
+     * test a valid client type in the newClient function
+     */
+    @Test
+    public void testValidNewClient() {
+        int clientID = 1;
+        String clientType = "Adult Male";
+        int expectedWholeGrains = 16;
+        int expectedFruitVeggies = 28;
+        int expectedProtein = 26;
+        int expectedOther = 30;
+        int expectedCalories = 2500;
+        Client expectedClient = new Client(clientID, expectedClientType, expectedWholeGrains, expectedProtein, expectedFruitVeggies,
+                expectedCalories, expectedOther);
+        ClientSingleton clientSingleton = new ClientSingleton();
 
-    ClientSingleton clientSingleton = new ClientSingleton();
-
-
-    public void testFetchClientTypes() {
-        System.out.println("Test fetch client types");
-        ArrayList<Client> clientList = clientSingleton.fetchClientTypes();
-        assertEquals("fetchClientTypes was incorrect: ", clientList, expectedArrayList);
+        Client resultClient = clientSingleton.newClient("Adult Male");
+        String resultClientType = resultClient.getClientType();
+        String expectedClientType = expectedClient.getClientType();
+        assertEquals("Expected Client type was incorrect: ", expectedClientType, resultClientType);
     }
 
-    public void testNewClient() {
-        System.out.println("Test new client");
-        Client client = clientSingleton.newClient("Adult Male");
-        assertEquals("newClient was incorrect: ", client, expectedClient1);
+     /**
+     * test an invalid client type in the newClient function
+     */
+    @Test
+    public void testInvalidNewClient() {
+        ClientSingleton clientSingleton = new ClientSingleton();
+        String clientType = "Senior Citizen";
+        
+        boolean passed = false;
+        try {
+            clientSingleton.newClient(clientType);
+        }
+        catch (IllegalArgumentException e){
+            passed = true;
+        }
+        assertTrue("newClient() did not throw an error when trying to get a client type that does not exist", passed);
     }
 }
