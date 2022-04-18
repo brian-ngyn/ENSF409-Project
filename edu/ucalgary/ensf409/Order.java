@@ -36,10 +36,9 @@ public class Order implements PrintOutput{
 
     /**
      * Verify that all hampers in order can be built. If a hamper cannot be built,
-     * print out an error message, otherwise, output the order form 
+     * return it's error code, otherwise, output order form
      */
     public int validateOrder(){
-        int valid = 1;
         for (Hamper hamper: hampers){
             if (!hamper.validateHamper()){
                 return hamper.getError();

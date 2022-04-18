@@ -48,13 +48,4 @@ public class orderTest {
         ArrayList<Hamper> actualHampers = order.getHampers();
         assertEquals("Method getHampers did not return expected value after adding a new hamper with addHamper(): ", expectedHampers, actualHampers);
     }
-
-    /**
-     * validOrder() should return false given an empty Hamper ArrayList
-     */
-    @Test
-    public void testEmptyHamperArrayList(){
-        Order order = new Order(new ArrayList<Hamper>());
-        assertEquals("Method validateOrder() did not return false when Order was initialized with an empty ArrayList", order.validateOrder(), false);
-    }
 }
