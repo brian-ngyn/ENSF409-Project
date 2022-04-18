@@ -8,10 +8,22 @@ public class FoodItemDatabase {
     private Connection dbConnect;
     private ResultSet results;
 
+    /**
+     * Constructor for the database which calls fetchFromFoodDatabase()
+     */
     public FoodItemDatabase(){
-        fetchFromFoodDatabase();
+        
     }
 
+    /**
+     * 1st of 2 methods for the algorithm, goal is to hit the target amount for 3/4 of whole grains, fruit/veggies, protein, other
+     * and then call addLastFoodItem()
+     * @param targetWholeGrains
+     * @param targetVeggies
+     * @param targetProtein
+     * @param targetOther
+     * @return hamper with the food items that satisfy the target
+     */
     public ArrayList<FoodItem> generateFoodItems(int targetWholeGrains, int targetVeggies, int targetProtein, int targetOther) {
         ArrayList<FoodItem> hamper = new ArrayList<FoodItem>();
         int currWholeGrains = 0;
@@ -78,7 +90,7 @@ public class FoodItemDatabase {
                 }
             }
             hamper.add(bestItem);
-            foodItemArray.remove(bestItem);
+            deleteItem(bestItem.getItemName());
             currOther += (int)(bestItem.getOtherNutrition() / 100.0 * bestItem.getCalories());
             currVeggies += (int)(bestItem.getFruitsVeggiesContent() / 100.0 * bestItem.getCalories());
             currProtein += (int)(bestItem.getProteinContent() / 100.0 * bestItem.getCalories());
@@ -101,6 +113,16 @@ public class FoodItemDatabase {
         return hamper;
     }
 
+    /**
+     * 2nd of 2 methods for the algorithm, that resolves the last nutrition value that was not completed from
+     * generateFoodItems().
+     * @param targetWholeGrains
+     * @param targetVeggies
+     * @param targetProtein
+     * @param targetOther
+     * @param hamper
+     * @return hamper with 4/4 targets satisfied
+     */
     public ArrayList<FoodItem> addLastFoodItem(int targetWholeGrains, int targetVeggies, int targetProtein, int targetOther, ArrayList<FoodItem> hamper){
         int currWholeGrains = 0;
         int currVeggies = 0;
@@ -161,14 +183,18 @@ public class FoodItemDatabase {
              }
          }
         hamper.add(bestItem);
-        foodItemArray.remove(bestItem);
+        deleteItem(bestItem.getItemName());
 
         return hamper;
     }
 
+    /**
+     * Connect to the database using ENSF409 Convention of user:"student" and password:"ensf" from Lab F.
+     * Iterates over the available food table and adds each food item into the foodItemArray.
+     */
     public void fetchFromFoodDatabase(){
         try {
-            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "user1", "ensf");
+            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "student", "ensf");
             Statement myStatement = dbConnect.createStatement();
             results = myStatement.executeQuery("SELECT * FROM AVAILABLE_FOOD");
             while (results.next()){
@@ -188,6 +214,12 @@ public class FoodItemDatabase {
         }
     }
 
+    /**
+     * Deletes an item from the foodItemArray based by iterating over the array until
+     * it finds the item based on the foodName. If it cannot find the food, throw an
+     * illegal argument exception
+     * @param foodName
+     */
     public void deleteItem(String foodName){
         for (int i = 0; i < foodItemArray.size(); i++){
             if (foodItemArray.get(i).getItemName().equals(foodName)){
@@ -198,10 +230,18 @@ public class FoodItemDatabase {
         throw new IllegalArgumentException("Food Item: " + foodName + " was not found in database");
     }
 
+    /**
+     * This method returns the current foodItemArray
+     * @return foodItemArray
+     */
     public ArrayList<FoodItem> getFoodItemArray(){
         return this.foodItemArray;
     }
 
+    /**
+     * This method connects to the database and rewrites the AVAILABLE_FOOD table by iterating
+     * over the foodItemArray and adding each item.
+     */
     public void updateDatabase(){
         Statement clearDatabaseStatement;
         try {
@@ -230,17 +270,12 @@ public class FoodItemDatabase {
         }
     }
 
-    public void printDatabase(){
-        for (FoodItem currFoodItem : foodItemArray){
-            System.out.println(currFoodItem.getItemName());
-            System.out.print(" " + currFoodItem.getGrainContent());
-            System.out.print(" " + currFoodItem.getFruitsVeggiesContent());
-            System.out.print(" " + currFoodItem.getProteinContent());
-            System.out.print(" " + currFoodItem.getOtherNutrition());
-            System.out.println("\n");
-        }
-    }
-
+    /**
+     * This method takes a String of the foodItem name and searches the foodItemArray
+     * and returns the FoodItem object if the foodItem is found, else throws an exception
+     * @param foodItem
+     * @return FoodItem
+     */
     public FoodItem getFoodItem(String foodItem){
         for (FoodItem currFood : foodItemArray){
             if (currFood.getItemName().equals(foodItem)){

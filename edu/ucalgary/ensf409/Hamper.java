@@ -108,6 +108,7 @@ public class Hamper {
 			return false;
 		} else {
 			db = new FoodItemDatabase();
+			db.fetchFromFoodDatabase();
 			createHamper();
 			if(totalWholeGrains >= requiredWholeGrains && totalFruitVeggies >= requiredFruitVeggies && 
 			totalProtein >= requiredProtein && totalOther >= requiredOther && totalCalories >= requiredCalories) {

@@ -15,7 +15,7 @@ public class ClientSingleton {
         Connection dbConnect;
         ResultSet results;
         try {
-            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "user1", "ensf");
+            dbConnect = DriverManager.getConnection("jdbc:mysql://localhost/FOOD_INVENTORY", "student", "ensf");
             Statement myStatement = dbConnect.createStatement();
             results = myStatement.executeQuery("SELECT * FROM DAILY_CLIENT_NEEDS");
             while (results.next()){
