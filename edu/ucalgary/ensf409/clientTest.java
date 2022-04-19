@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 public class clientTest {
 
     /**
-     * test getWholeGrains()
+     * getWholeGrains() should return the correct whole grains required for an adult amle
      */
     @Test
     public void testGetWholeGrains() {
@@ -24,7 +24,7 @@ public class clientTest {
     }
 
     /**
-     * test getFruitVeggies()
+     * getFruitVeggies() should return the correct fruit/veggies required for an adult amle
      */
     @Test
     public void testGetFruitVeggies() {
@@ -42,7 +42,7 @@ public class clientTest {
     }
 
     /**
-     * test getProtein()
+     * getProtein() should return the correct protein required for an adult amle
      */
     @Test
     public void testGetProtein() {
@@ -60,7 +60,7 @@ public class clientTest {
     }
 
     /**
-     * test getOther()
+     * getOther() should return the correct "other" required for an adult amle
      */
     @Test
     public void testGetOther() {
@@ -78,7 +78,7 @@ public class clientTest {
     }
 
     /**
-     * test getCalories()
+     * getCalories() should return the correct calories required for an adult amle
      */
     @Test
     public void testGetCalories() {

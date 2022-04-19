@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 /**
  * NOTE: Majority of invalid hamper input is handled by the GUI. For example,
- * negative quantities are not allowed, and empty hampers are caught by the GUI
+ * negative quantities are not allowed, and empty hampers are caught by the GUI,
+ * so Order will only ever receive valid Hampers as input
  */
 public class orderTest {
     /**
